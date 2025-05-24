@@ -1788,11 +1788,11 @@ _Menciona las herramientas que utilizaste para crear tu proyecto_
 
 ### Dependecias 🗃️
 
-| Paquete       | Versión | Página NPM                                  | Página Documentación                              |
-|---------------|---------|---------------------------------------------|---------------------------------------------------|
-| axios         | 1.3.4   | https://www.npmjs.com/package/axios         | https://github.com/axios/axios                    |
-| js-yaml       | 4.1.0   | https://www.npmjs.com/package/js-yaml       |                                                   |
-| morgan        | 1.10.0  | https://www.npmjs.com/package/morgan        |                                                   |
+| Paquete       | Versión | Página NPM                            | Página Documentación           |
+|---------------|---------|---------------------------------------|--------------------------------|
+| axios         | 1.3.4   | https://www.npmjs.com/package/axios   | https://github.com/axios/axios |
+| js-yaml       | 4.1.0   | https://www.npmjs.com/package/js-yaml |                                |
+| morgan        | 1.10.0  | https://www.npmjs.com/package/morgan  |                                |
 
 ### Depedencias de desarrollo 🗃️
 
