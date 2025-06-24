@@ -86,6 +86,23 @@ La aplicación se desplegará exitosamente mostrando el siguiente resultado en c
 Server is listening on http://localhost:3000/api
 ```
 
+## Docker 🐋
+A continuacion dejo los comandos a utilizar para generar la imagen y posteriormente ejecutarla
+
+### Imagen
+Para generar la imagen debemos utilizar el siguiente comando
+
+```shell
+docker build -t node-nestjs .
+```
+
+### Ejecutar
+Para ejecutar la imagen debemos utilizar el siguiente comando
+
+```shell
+docker run -p 3000:3000 node-nestjs
+```
+
 ## Exception Filter 🚏
 Un exception filter es una función se ejecuta al momento de un error no controlado. esta funcion permite retornar una respuesta adecuada y fácil de usar.
 
