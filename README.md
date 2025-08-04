@@ -1912,7 +1912,7 @@ Para configurar Swagger UI simplemente agregamos el siguiente codigo al archivo 
 
 Como podemos ver definimos el **swaggerDocument** con la app y swagger config, posteriormente utilizamos **SwaggerModule** para inicializar el swagger ui
 
-Cuando ejecutemos a la aplicacion debemos entrar a la pagina **/swagger-ui/**
+Cuando ejecutemos a la aplicacion debemos entrar a la pagina **/swagger-ui.html**
 
 ## Construido con 🛠️
 
