@@ -1,4 +1,4 @@
-# Node Express
+# Node NestJS
 
 Proyecto Node + NestJS + Axios + Morgan + Test Unitarios (jest) + Test de Aceptación (cucumber) + Test de Rendimiento (artillery/jmeter) + Reporte de Cobertura (jest)
 
@@ -1782,22 +1782,137 @@ npm run start:dev
 La aplicación se desplegará exitosamente mostrando el siguiente resultado en consola:
 
 ```shell
-
-
-  _   _           _        _   _           _      _ ____  
- | \ | | ___   __| | ___  | \ | | ___  ___| |_   | / ___| 
- |  \| |/ _ \ / _` |/ _ \ |  \| |/ _ \/ __| __|  | \___ \ 
+  _   _           _        _   _           _      _ ____
+ | \ | | ___   __| | ___  | \ | | ___  ___| |_   | / ___|
+ |  \| |/ _ \ / _` |/ _ \ |  \| |/ _ \/ __| __|  | \___ \
  | |\  | (_) | (_| |  __/ | |\  |  __/\__ \ || |_| |___) |
  |_| \_|\___/ \__,_|\___| |_| \_|\___||___/\__\___/|____/
------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------
 MS: Node NestJS
 MS VERSION: 1.0.0
-NODE VERSION: v16.17.0
+NODE VERSION: v22.9.0
 NESTJS: 9.3.9
 CONTEXT PATH: /api
 PORT: 3000
-----------------------------------------------------------------------------------------------------------
+------------------------------------------------------------
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [NestFactory] Starting Nest application...
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [InstanceLoader] AppModule dependencies initialized +13ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [InstanceLoader] HttpModule dependencies initialized +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [InstanceLoader] InfoModule dependencies initialized +1ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [InstanceLoader] ConfigHostModule dependencies initialized +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [InstanceLoader] TerminusModule dependencies initialized +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [InstanceLoader] ConfigModule dependencies initialized +1ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [InstanceLoader] ConfigModule dependencies initialized +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [InstanceLoader] HealthModule dependencies initialized +1ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [InstanceLoader] JwtModule dependencies initialized +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [InstanceLoader] ProductoModule dependencies initialized +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [InstanceLoader] AuthModule dependencies initialized +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [RoutesResolver] InfoController {/api/info}: +16ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [RouterExplorer] Mapped {/api/info, GET} route +1ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [RoutesResolver] HealthController {/api/health}: +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [RouterExplorer] Mapped {/api/health, GET} route +1ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [RoutesResolver] AuthController {/api/auth}: +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [RouterExplorer] Mapped {/api/auth, POST} route +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [RoutesResolver] ProductoController {/api/productos}: +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [RouterExplorer] Mapped {/api/productos, GET} route +1ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [RouterExplorer] Mapped {/api/productos/:sku, GET} route +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [RouterExplorer] Mapped {/api/productos, POST} route +0ms
+[Nest] 19424  - 04-08-2025, 4:54:06 p. m.     LOG [NestApplication] Nest application successfully started +2ms
+Server is listening on http://localhost:3000/api
 ```
+
+## Swagger
+### Documentar Endpoints
+Para documentar los endpoints debemos hacerlo de forma manual mediante anotaciones especiales
+
+#### General
+La documentacion general se realiza creando una estructura especial llamada **DocumentBuilder** a continuacion el detalle
+
+```javascript
+  const swagger = configuration['swagger'];
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle(swagger.title)
+    .setDescription(swagger.description)
+    .setContact(swagger.contact.name, swagger.contact.url, swagger.contact.email)
+    .setLicense(swagger.license.name, swagger.license.url)
+    .setVersion(swagger.version)
+    .addServer(`http://localhost:${server.port}`, 'Development Server')
+    .addServer(`https://node-nestjs.onrender.com`, 'Production Server')
+    .build();
+```
+
+Como podemos ver definimos la informacion del proyecto, contacto, licencia, version y los servidores
+
+#### Rutas
+Para documentar los endpoints debemos colocar una anotacion especial en la ruta
+
+Ejemplo
+InfoController
+
+```javascript
+@ApiTags('info')
+@Controller('info')
+export class InfoController {
+    private infoConfig = configuration['info'];
+
+    @ApiOkResponse({
+        type: InformationDTO
+    })
+    @Get()
+    info(): InformationDTO {
+        return new InformationDTO(this.infoConfig.application.name, this.infoConfig.application.description, this.infoConfig.application.version);;
+    }
+}
+```
+
+Como podemos ver indicamos el tag con la anotación **@ApiTags**, el esquema de respuesta con **@ApiOkResponse**
+
+#### DTO
+Para documentar los dto debemos colocar una anotacion especial en el dto
+
+Ejemplo
+InformationDTO
+
+```javascript
+export class InformationDTO {
+    @ApiProperty()
+    name: string;
+    @ApiProperty()
+    description: string;
+    @ApiProperty()
+    version: string;
+
+    constructor(name: string, description: string, version: string) {
+        this.name = name;
+        this.description = description;
+        this.version = version;
+    }
+}
+```
+
+Tenemos que usar la anotación **@ApiProperty** para indicar que el campo es una propiedad y asi se genere el esquema automaticamente
+
+### Configurar Swagger UI
+Para configurar Swagger UI simplemente agregamos el siguiente codigo al archivo **main.ts**
+
+```javascript
+  const swagger = configuration['swagger'];
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle(swagger.title)
+    .setDescription(swagger.description)
+    .setContact(swagger.contact.name, swagger.contact.url, swagger.contact.email)
+    .setLicense(swagger.license.name, swagger.license.url)
+    .setVersion(swagger.version)
+    .addServer(`http://localhost:${server.port}`, 'Development Server')
+    .addServer(`https://node-nestjs.onrender.com`, 'Production Server')
+    .build();
+  const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup(swagger.path, app, swaggerDocument);
+```
+
+Como podemos ver definimos el **swaggerDocument** con la app y swagger config, posteriormente utilizamos **SwaggerModule** para inicializar el swagger ui
+
+Cuando ejecutemos a la aplicacion debemos entrar a la pagina **/swagger-ui/**
 
 ## Construido con 🛠️
 

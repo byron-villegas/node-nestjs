@@ -46,12 +46,16 @@ const bootstrap = async () => {
     .setContact(swagger.contact.name, swagger.contact.url, swagger.contact.email)
     .setLicense(swagger.license.name, swagger.license.url)
     .setVersion(swagger.version)
+    .addServer(`http://localhost:${server.port}`, 'Development Server')
+    .addServer(`https://node-nestjs.onrender.com`, 'Production Server')
     .build();
 
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup(server.path + '/' + swagger.path, app, swaggerDocument);
+  SwaggerModule.setup(swagger.path, app, swaggerDocument);
 
-  await app.listen(server.port);
+  await app.listen(server.port, () => {
+      console.log(`Server is listening on http://localhost:${server.port}${server.path}`);
+  });
 }
 
 bootstrap();
