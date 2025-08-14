@@ -3,7 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as morgan from 'morgan';
 import { AppModule } from './app.module';
 import { configuration, showBanner } from './config/configuration';
-import { HttpExceptionFilter } from './filter/http.exception.filter';
+import { HttpExceptionFilter } from './filter/http-exception.filter';
 
 const bootstrap = async () => {
   showBanner();

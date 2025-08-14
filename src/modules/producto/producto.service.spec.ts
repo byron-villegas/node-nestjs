@@ -5,7 +5,11 @@ describe('ProductoService', () => {
   let productoService: ProductoService;
 
   beforeEach(() => {
-    productoService = new ProductoService();
+    const mockProductoRepository = {
+      getProductos: jest.fn(() => productos),
+      save: jest.fn(),
+    } as any;
+    productoService = new ProductoService(mockProductoRepository);
   });
 
   describe('findAll', () => {
@@ -105,7 +109,7 @@ describe('ProductoService', () => {
 
   describe('save', () => {
 
-    it('should save an product', async() => {
+    it('should save an product', async () => {
       let productoAGuardar = productos.map(producto => productoService.convert(producto))[0];
       productoAGuardar.id = 3432442;
       productoAGuardar.sku = 11111111;
@@ -113,7 +117,7 @@ describe('ProductoService', () => {
       await productoService.save(productoAGuardar);
     });
 
-    it('should save an product with product exists by id', async() => {
+    it('should save an product with product exists by id', async () => {
       try {
         let productoAGuardar = productos.map(producto => productoService.convert(producto))[0];
         productoAGuardar.sku = 11111111;
@@ -125,7 +129,7 @@ describe('ProductoService', () => {
       }
     });
 
-    it('should save an product with product exists by sku', async() => {
+    it('should save an product with product exists by sku', async () => {
       try {
         let productoAGuardar = productos.map(producto => productoService.convert(producto))[0];
         productoAGuardar.id = 343242532;

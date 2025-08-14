@@ -7,7 +7,12 @@ describe('ProductoController', () => {
   let productoService: ProductoService;
 
   beforeEach(() => {
-    productoService = new ProductoService();
+    const mockProductoRepository = {
+      getProductos: jest.fn(()=> productos),
+      save: jest.fn(),
+    } as any;
+
+    productoService = new ProductoService(mockProductoRepository);
     productoController = new ProductoController(productoService);
   });
 

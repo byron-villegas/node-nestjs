@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthRequestDTO } from './dto/auth-request.dto';
@@ -13,6 +13,7 @@ export class AuthController {
   @ApiOkResponse({
     type: AuthResponseDTO
   })
+  @HttpCode(200)
   @Post()
   signIn(@Body() authRequestDTO: AuthRequestDTO) {
     return this.authService.signIn(authRequestDTO);

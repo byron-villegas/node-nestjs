@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ProductoDTO } from './dto/producto.dto';
 import { ProductoService } from './producto.service';
@@ -14,6 +14,7 @@ export class ProductoController {
         type: ProductoDTO,
         isArray: true
     })
+    @HttpCode(200)
     @Get()
     findAll(@Query() query): ProductoDTO[] {
         const queryKeys = Object.keys(query);
@@ -36,6 +37,7 @@ export class ProductoController {
     @ApiOkResponse({
         type: ProductoDTO
     })
+    @HttpCode(200)
     @Get(':sku')
     @ApiParam({ name: 'sku' })
     findBySku(@Param() params): ProductoDTO {
@@ -43,6 +45,7 @@ export class ProductoController {
     }
 
     @UseGuards(AuthGuard)
+    @HttpCode(201)
     @Post()
     save(@Body() producto: ProductoDTO) {
         this.productoService.save(producto);

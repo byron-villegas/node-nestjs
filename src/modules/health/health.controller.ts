@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpCode } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { DiskHealthIndicator, HealthCheck, HealthCheckService, HttpHealthIndicator, MemoryHealthIndicator } from '@nestjs/terminus';
 
@@ -7,6 +7,7 @@ import { DiskHealthIndicator, HealthCheck, HealthCheckService, HttpHealthIndicat
 export class HealthController {
   constructor(private health: HealthCheckService, private http: HttpHealthIndicator, private readonly disk: DiskHealthIndicator, private memory: MemoryHealthIndicator) { }
 
+  @HttpCode(200)
   @Get()
   @HealthCheck()
   check() {

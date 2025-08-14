@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, HttpException, Logger } from '@nestjs/common';
-import { HttpExceptionFilter } from './http.exception.filter';
-import { ErrorNegocioException } from '../exceptions/error.negocio.exception';
-import { ErrorTecnicoException } from '../exceptions/error.tecnico.exception';
+import { HttpExceptionFilter } from './http-exception.filter';
+import { ErrorNegocioException } from '../exceptions/error-negocio.exception';
+import { ErrorTecnicoException } from '../exceptions/error-tecnico.exception';
 
 const mockAppLoggerService = {
     info: jest.fn(),

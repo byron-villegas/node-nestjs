@@ -1,17 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import * as productos from '../../data/productos.json';
-import { ErrorNegocioException } from '../../exceptions/error.negocio.exception';
+import { ErrorNegocioException } from '../../exceptions/error-negocio.exception';
 import { CaracteristicaDTO } from './dto/caracteristica.dto';
 import { ProductoDTO } from './dto/producto.dto';
 import { Producto } from './interfaces/producto';
+import { ProductoRepository } from './producto.repository';
 
 @Injectable()
 export class ProductoService {
+
+    constructor(private productoRepository: ProductoRepository) { }
+
     findAll(): ProductoDTO[] {
+        let productos: Producto[] = this.productoRepository.getProductos();
+
         return productos.map(producto => this.convert(producto));
     }
 
     findBySku(sku: string): ProductoDTO {
+        let productos: Producto[] = this.productoRepository.getProductos();
 
         if (!sku.match(/^\d+$/)) {
             throw new ErrorNegocioException('EXCSDSNE00', 'Codigo sku debe ser un numero entero');
@@ -27,6 +33,8 @@ export class ProductoService {
     }
 
     sortByProperty(property: string): ProductoDTO[] {
+        let productos: Producto[] = this.productoRepository.getProductos();
+
         const propiedad = property.includes('-') || property.includes('+') ? property.substring(1).trim() : property.trim();
 
         if (!productos[0][propiedad]) {
@@ -47,7 +55,10 @@ export class ProductoService {
     }
 
     findByPropertyAndValue(property: string, value: string): ProductoDTO[] {
-        const producto = this.findAll()[0];
+        let productos: Producto[] = this.productoRepository.getProductos();
+
+        const producto = productos[0];
+
         if (!producto[property]) {
             throw new ErrorNegocioException('EXPNE01', 'Propiedad no encontrada');
         }
@@ -58,9 +69,8 @@ export class ProductoService {
 
         const productosFiltrados = productos.filter(producto => {
             if ((typeof producto[property]) === 'number' && !isNaN(parseInt(value))) {
-                return producto[property] == value;
-            }
-            else {
+                return producto[property] == parseInt(value);
+            } else {
                 return producto[property].toUpperCase().includes(value.toUpperCase());
             }
         });
@@ -68,14 +78,16 @@ export class ProductoService {
         return productosFiltrados.map(producto => this.convert(producto));
     }
 
-    save(producto: ProductoDTO) {
+    save(producto: ProductoDTO): void {
+        let productos: Producto[] = this.productoRepository.getProductos();
+
         const productoExiste = productos.find(prod => prod.id === producto.id || prod.sku === producto.sku);
 
         if(productoExiste) {
             throw new ErrorNegocioException('EXPYE00', 'Producto ya existe');
         }
 
-        productos.push(this.convertToProducto(producto));
+        this.productoRepository.save(this.convertToProducto(producto));
     }
 
     convert(producto: Producto): ProductoDTO {
