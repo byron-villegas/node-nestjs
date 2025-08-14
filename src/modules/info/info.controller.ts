@@ -13,6 +13,6 @@ export class InfoController {
     })
     @Get()
     info(): InformationDTO {
-        return new InformationDTO(this.infoConfig.application.name, this.infoConfig.application.description, this.infoConfig.application.version);;
+        return new InformationDTO(this.infoConfig.application.name, this.infoConfig.application.description, this.infoConfig.application.version);
     }
 }
