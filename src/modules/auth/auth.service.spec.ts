@@ -1,3 +1,4 @@
+import { AuthRepository } from './auth.repository';
 import { AuthService } from './auth.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtModule, JwtService } from '@nestjs/jwt';
@@ -18,12 +19,25 @@ describe('AuthService', () => {
             })],
             controllers: [],
             providers: [
+                {
+                    provide: AuthRepository,
+                    useValue: {
+                        getUsers: jest.fn().mockReturnValue([
+                            { id: 1, nombres: 'Byron Stevens', apellidos: 'Villegas Moya', username: 'byron.villegas', password: 'admin123' }
+                        ])
+                    }
+                },
                 AuthService,
                 JwtService,
             ],
         }).compile();
         jwtService = moduleRef.get<JwtService>(JwtService);
-        authService = new AuthService(jwtService);
+        const mockAuthRepository = {
+            getUsers: jest.fn().mockReturnValue([
+                { id: 1, nombres: 'Byron Stevens', apellidos: 'Villegas Moya', username: 'byron.villegas', password: 'admin123' }
+            ])
+        } as any;
+        authService = new AuthService(mockAuthRepository, jwtService);
     });
 
     describe('signIn', () => {
@@ -34,24 +48,24 @@ describe('AuthService', () => {
         it('should return an UnauthorizedException for username empty', async () => {
             const authRequestDTO = new AuthRequestDTO('', 'admin123');
             try {
-            await authService.signIn(authRequestDTO);
-            } catch(error) {
+                await authService.signIn(authRequestDTO);
+            } catch (error) {
                 expect(error).toBeInstanceOf(UnauthorizedException);
             }
         });
         it('should return an UnauthorizedException for password empty', async () => {
             const authRequestDTO = new AuthRequestDTO('byron.villegas', '');
             try {
-            await authService.signIn(authRequestDTO);
-            } catch(error) {
+                await authService.signIn(authRequestDTO);
+            } catch (error) {
                 expect(error).toBeInstanceOf(UnauthorizedException);
             }
         });
         it('should return an UnauthorizedException for not found user', async () => {
             const authRequestDTO = new AuthRequestDTO('abc', 'abc');
             try {
-            await authService.signIn(authRequestDTO);
-            } catch(error) {
+                await authService.signIn(authRequestDTO);
+            } catch (error) {
                 expect(error).toBeInstanceOf(UnauthorizedException);
             }
         });

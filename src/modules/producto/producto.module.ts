@@ -8,6 +8,6 @@ import { ProductoRepository } from './producto.repository';
 @Module({
     imports: [ConfigModule],
     controllers: [ProductoController],
-    providers: [ProductoService, JwtService, ProductoRepository],
+    providers: [ProductoRepository, ProductoService, JwtService],
 })
 export class ProductoModule { }

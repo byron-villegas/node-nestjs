@@ -1,12 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import * as usuarios from '../../data/usuarios.json';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRequestDTO } from './dto/auth-request.dto';
 import { AuthResponseDTO } from './dto/auth-response.dto';
+import { AuthRepository } from './auth.repository';
 
 @Injectable()
 export class AuthService {
-    constructor(private jwtService: JwtService) { 
+    constructor(private authRepository: AuthRepository, private jwtService: JwtService) { 
 
     }
 
@@ -14,6 +14,8 @@ export class AuthService {
         if(!authRequestDTO.username || !authRequestDTO.password) {
             throw new UnauthorizedException();
         }
+
+        let usuarios = this.authRepository.getUsers();
 
         const user = usuarios.find(usuario => usuario.username === authRequestDTO.username && usuario.password === authRequestDTO.password);
     
