@@ -70,7 +70,7 @@ describe('HttpExceptionFilter', () => {
             expect(mockJson).toBeCalledTimes(1);
         });
         it('ErrorTecnico exception', () => {
-            service.catch(new ErrorTecnicoException('CBA', '321'), mockArgumentsHost);
+            service.catch(new ErrorTecnicoException('ABC', '123'), mockArgumentsHost);
             expect(mockHttpArgumentsHost).toBeCalledTimes(1);
             expect(mockHttpArgumentsHost).toBeCalledWith();
             expect(mockGetResponse).toBeCalledTimes(1);
